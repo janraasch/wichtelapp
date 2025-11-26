@@ -1,0 +1,24 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'wichtel/styles.css' %}">
+
+{% load allauth i18n %}
+
+<body>
+    <header>
+        <nav>
+            <a href="/"><img alt="WICHTEL.app" src="{% static 'wichtel/images/android-chrome-512x512.png' %}" height="70"></a>
+            <ul>
+              <li><a href="{% url 'account_login' %}">Login</a></li>
+            </ul>
+          </nav>
+          <h1>Login</h1>
+          <p>Wir schicken Dir einen Code zu Deiner E-Mail-Adresse.</p>
+          <form method="post" action="{% url 'account_request_login_code' %}">
+            {% csrf_token %}
+            {{ form.email }}
+            {{ redirect_field }}
+            <button type="submit">{% trans "Login" %}</button>
+          </form>
+    </header>
+</body>

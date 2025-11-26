@@ -1,0 +1,55 @@
+{% load static %}
+<html color-mode="user">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WICHTEL.app{% block title %}{% endblock %}</title>
+
+  <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'wichtel/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'wichtel/images/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'wichtel/images/favicon-32x32.png' %}">
+
+  <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'wichtel/images/apple-touch-icon.png' %}">
+
+  <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'wichtel/images/android-chrome-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'wichtel/images/android-chrome-512x512.png' %}">
+
+  <!-- Theme color -->
+    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#333" media="(prefers-color-scheme: dark)">
+
+    <link rel="stylesheet" href="{% static 'wichtel/styles.css' %}">
+  </head>
+
+  <body>
+    <header>
+      {% if messages %}
+        {% for message in messages %}
+          <sup class="message {{ message.tags }}">{{ message }}</sup>
+        {% endfor %}
+      {% endif %}
+      <nav>
+        <a href="/">
+          <img alt="WICHTEL.app" src="{% static 'wichtel/images/android-chrome-512x512.png' %}" height="70">
+        </a>
+        <ul>
+          {% block nav %}{% endblock %}
+        </ul>
+        {% block nav_extra %}{% endblock %}
+      </nav>
+      {% block content %}{% endblock %}
+    </header>
+    <script>
+      setTimeout(function() {
+        var messages = document.getElementsByClassName('message');
+        for (var i = 0; i < messages.length; i++) {
+          messages[i].remove();
+        }
+      }, 3000);
+    </script>
+  </body>
+</html>
+
