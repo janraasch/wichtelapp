@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+    {% if not current_year_exists %}
+        <li>
+            <a href="create-current-year/" class="addlink">Create drawing for {{ current_year }}</a>
+        </li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

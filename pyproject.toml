@@ -50,8 +50,20 @@ target-version = "py313"
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F"]
-ignore = ["E501", "E741"]                # temporary
+ignore = ["E501", "E741"] # temporary
 per-file-ignores = {}
-# Enable Pyflakes `E` and `F` codes by default.
-select = ["E", "F"]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
 unfixable = []

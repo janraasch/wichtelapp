@@ -14,3 +14,6 @@ db/
 
 # Django Simple Deploy
 dsd_logs/
+
+# ruff
+.ruff_cache/

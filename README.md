@@ -7,6 +7,22 @@
 uv export --no-dev --no-hashes > requirements.txt
 ```
 
+### just
+
+```bash
+# install
+brew install just
+
+# run dev server
+just dev
+
+# format code
+just fmt
+
+# run tests
+just test
+```
+
 ### fly.io
 
 ```bash

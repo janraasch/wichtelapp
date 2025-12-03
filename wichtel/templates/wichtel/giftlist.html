@@ -1,0 +1,31 @@
+{% extends "wichtel/base.html" %}
+
+{% block title %} - Geschenkliste{% endblock %}
+
+{% block nav %}
+  <li><a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Logout</a></li>
+{% endblock %}
+
+{% block nav_extra %}
+  <form id="logout-form" method="post" action="{% url 'account_logout' %}" hidden>
+    {% csrf_token %}
+  </form>
+{% endblock %}
+
+{% block content %}
+  <h1>
+    Hey <mark><em>{{ user.username|capfirst }}</em></mark> — Deine Geschenkliste
+  </h1>
+  <p>
+    Die Ziehung in diesem Jahr hat ergeben, dass du <mark><em>{{ giftlist.user.username|capfirst }}</em></mark> beschenken darfst! 🎉
+  </p>
+  <p>
+    📬 Dein Geschenk wird sehnsüchtig erwartet in: <strong>{{ address }}</strong>.
+  </p>
+  <hr>
+  <blockquote>
+    {{ giftlist.text|linebreaks|urlize }}
+  </blockquote>
+  <hr>
+  <p>Viel Spass beim Beschenken! 🎁</p>
+{% endblock %}

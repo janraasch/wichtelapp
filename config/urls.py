@@ -14,17 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from allauth.account import views as allauth_views
-from config.settings import ENABLE_DEBUG_TOOLBAR
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
-from debug_toolbar.toolbar import debug_toolbar_urls
+
+from config.settings import ENABLE_DEBUG_TOOLBAR
 
 urlpatterns = [
-    path('accounts/signup/', RedirectView.as_view(pattern_name='account_login'), name='account_signup'),
-    path('accounts/login/', allauth_views.login, name='account_login'),
-    path('accounts/logout/', allauth_views.logout, name='account_logout'),
-    path('', include('wichtel.urls')),
-    path('admin/', admin.site.urls),
-] + (debug_toolbar_urls() if ENABLE_DEBUG_TOOLBAR else [])
+    path("accounts/signup/", RedirectView.as_view(pattern_name="account_login"), name="account_signup"),
+    path("accounts/login/", allauth_views.login, name="account_login"),
+    path("accounts/logout/", allauth_views.logout, name="account_logout"),
+    path("", include("wichtel.urls")),
+    path("admin/", admin.site.urls),
+]
+
+if ENABLE_DEBUG_TOOLBAR:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
+    urlpatterns += debug_toolbar_urls()
