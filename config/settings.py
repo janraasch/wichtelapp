@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'allauth',
     'allauth.account',
-    'django_simple_deploy',
 ]
 
 MIDDLEWARE = [
