@@ -10,7 +10,7 @@ from .models import Event, UserDrawing, Wishlist
 @login_required
 def home(request):
     current_year = datetime.now().year
-    user_drawing = UserDrawing.objects.get(giver=request.user, drawing__year=current_year)
+    user_drawing = UserDrawing.objects.filter(giver=request.user, drawing__year=current_year).first()
     if user_drawing and user_drawing.receiver.wishlist and user_drawing.receiver.wishlist.text:
         return giftlist(user_drawing.receiver.wishlist, request)
     return wishlist(request)
