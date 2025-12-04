@@ -4,22 +4,22 @@ default:
 
 # Run development server
 dev:
-    python manage.py runserver
+    uv run python manage.py runserver
 
 # Run tests
 test:
-    python manage.py test
+    uv run python manage.py test
 
 # Check linting (no fixes)
 lint:
-    ruff check .
-    djhtml --check wichtel/templates/
+    uv run ruff check .
+    uv run djhtml --check wichtel/templates/
 
 # Auto-fix and format
 fmt:
-    ruff check --fix .
-    ruff format .
-    djhtml wichtel/templates/
+    uv run ruff check --fix .
+    uv run ruff format .
+    uv run djhtml wichtel/templates/
 
 # CI: lint + test
 ci: lint test
