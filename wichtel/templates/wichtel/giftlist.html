@@ -12,20 +12,25 @@
   </form>
 {% endblock %}
 
-{% block content %}
+{% block header %}
   <h1>
-    Hey <mark><em>{{ user.username|capfirst }}</em></mark> — Deine Geschenkliste
+    Hey <mark><em>{{ user.username|capfirst }}</em></mark> — Du hast die <mark><em>{{ code_name }}</em></mark> gezogen! 🎉
   </h1>
   <p>
-    Die Ziehung in diesem Jahr hat ergeben, dass du <mark><em>{{ code_name }}</em></mark> beschenken darfst! 🎉
+    📬 Dein Geschenk wird in <strong>{{ address }}</strong> sehnsüchtig erwartet.
   </p>
-  <p>
-    📬 Dein Geschenk wird sehnsüchtig erwartet in: <strong>{{ address }}</strong>.
-  </p>
-  <hr>
-  <blockquote>
-    {{ giftlist.text|linebreaks|urlize }}
-  </blockquote>
-  <hr>
-  <p>Viel Spass beim Beschenken! 🎁</p>
+{% endblock %}
+
+{% block content %}
+  <main>
+    <hr>
+    <article>
+      <h2>Die Wunschliste der <mark><em>{{ code_name }}</em></mark></h2>
+      {{ giftlist.text|linebreaks|urlizetrunc:40 }}
+    </article>
+  </main>
+  <footer>
+    <hr>
+    <p>Viel Spass beim Beschenken! 🎁</p>
+  </footer>
 {% endblock %}

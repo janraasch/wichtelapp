@@ -604,3 +604,20 @@ blockquote footer {
 .message.error { background: #f8d7da; color: #721c24; }
 .message.warning { background: #fff3cd; color: #856404; }
 .message.info { background: #d1ecf1; color: #0c5460; }
+
+footer,
+header,
+main {
+  /* We don't need padding (top and bottom) since we have hr tags to separate the content */
+  padding: 0 1rem;
+}
+
+header {
+  /* Add some padding for message display */
+  padding-top: 3rem;
+}
+
+footer {
+  /* Add some breathing space at the bottom */
+  padding-bottom: 3rem;
+}

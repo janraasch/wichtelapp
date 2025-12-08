@@ -40,8 +40,9 @@
         </ul>
         {% block nav_extra %}{% endblock %}
       </nav>
-      {% block content %}{% endblock %}
+      {% block header %}{% endblock %}
     </header>
+    {% block content %}{% endblock %}
     <script>
       setTimeout(function() {
         var messages = document.getElementsByClassName('message');
