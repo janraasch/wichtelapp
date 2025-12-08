@@ -6,4 +6,9 @@ class WichtelConfig(AppConfig):
     name = "wichtel"
 
     def ready(self):
-        pass
+        from allauth.account.signals import user_logged_in, user_logged_out
+
+        from .signals import on_user_logged_in, on_user_logged_out
+
+        user_logged_in.connect(on_user_logged_in)
+        user_logged_out.connect(on_user_logged_out)
