@@ -7,7 +7,7 @@ from .models import Drawing, Event, Profile, UserDrawing, Wishlist
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "address", "created_at", "updated_at")
+    list_display = ("user", "code_name", "address", "created_at", "updated_at")
 
 
 @admin.register(Wishlist)

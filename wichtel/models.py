@@ -136,7 +136,7 @@ class UserDrawing(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.giver} → {self.receiver} ({self.drawing.year})"
+        return f"{self.giver} → {self.receiver.profile.code_name} ({self.drawing.year})"
 
 
 class Profile(models.Model):
