@@ -28,5 +28,9 @@ def _wishlist(request):
 
 def _giftlist(giftlist, request):
     Event.objects.create(user=request.user, name="giftlist.viewed")
-    address = giftlist.user.profile.address
-    return render(request, "wichtel/giftlist.html", {"giftlist": giftlist, "address": address})
+    profile = giftlist.user.profile
+    return render(request, "wichtel/giftlist.html", {
+        "giftlist": giftlist,
+        "code_name": profile.code_name,
+        "address": profile.address,
+    })
