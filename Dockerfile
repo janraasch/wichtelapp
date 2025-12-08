@@ -1,22 +1,48 @@
-ARG PYTHON_VERSION=3.12-slim-bullseye
+# See https://github.com/astral-sh/uv-docker-example/blob/main/standalone.Dockerfile
 
-FROM python:${PYTHON_VERSION}
+# First, build the application in the `/app` directory
+FROM ghcr.io/astral-sh/uv:bookworm-slim AS builder
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Configure the Python directory so it is consistent
+ENV UV_PYTHON_INSTALL_DIR=/python
 
-RUN mkdir -p /code
+# Only use the managed Python version
+ENV UV_PYTHON_PREFERENCE=only-managed
 
-WORKDIR /code
+# Install Python before the project for caching
+RUN uv python install 3.12
 
-COPY requirements.txt /tmp/requirements.txt
+WORKDIR /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project --no-dev
+COPY . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-dev
 
-RUN set -ex && \
-    pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt && \
-    rm -rf /root/.cache/
+# Then, use a final image without uv
+FROM debian:bookworm-slim
 
-COPY . /code/
+# Setup a non-root user
+RUN groupadd --system --gid 999 nonroot \
+ && useradd --system --gid 999 --uid 999 --create-home nonroot
+
+# Copy the Python version
+COPY --from=builder --chown=python:python /python /python
+
+# Copy the application from the builder
+COPY --from=builder --chown=nonroot:nonroot /app /app
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Use the non-root user to run our application
+USER nonroot
+
+# Use `/app` as the working directory
+WORKDIR /app
 
 RUN ON_FLYIO_SETUP="1" python manage.py collectstatic --noinput
 
