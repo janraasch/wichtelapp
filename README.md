@@ -25,6 +25,10 @@ fly deploy
 # start shell
 fly ssh console
 
+# then, to e.g. run python shell
+export PATH="/app/.venv/bin:$PATH"
+python manage.py shell
+
 # stream logs
 fly logs
 ```
