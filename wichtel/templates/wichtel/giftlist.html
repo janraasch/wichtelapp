@@ -14,7 +14,7 @@
 
 {% block header %}
   <h1>
-    Hey <mark><em>{{ user.username|capfirst }}</em></mark> — Du hast die <mark><em>{{ code_name }}</em></mark> gezogen! 🎉
+    Hey <em>{{ user.username|capfirst }}</em> — Du hast die <mark><em>{{ code_name }}</em></mark> gezogen! 🎉
   </h1>
   <p>
     📬 Dein Geschenk wird in <strong>{{ address }}</strong> sehnsüchtig erwartet.
@@ -26,7 +26,7 @@
     <hr>
     <article>
       <h2>Die Wunschliste der <mark><em>{{ code_name }}</em></mark></h2>
-      {{ giftlist.text|linebreaks|urlizetrunc:40 }}
+      {{ giftlist.text|linebreaks|urlize }}
     </article>
   </main>
   <footer>
