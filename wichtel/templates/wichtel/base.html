@@ -36,9 +36,17 @@
           <img alt="WICHTEL.app" src="{% static 'wichtel/images/android-chrome-512x512.png' %}" height="70">
         </a>
         <ul>
-          {% block nav %}{% endblock %}
+          {% if user.is_authenticated %}
+            <li><a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Log out</a></li>
+          {% else %}
+            <li><a href="{% url 'account_login' %}">Log in</a></li>
+          {% endif %}
         </ul>
-        {% block nav_extra %}{% endblock %}
+        {% if user.is_authenticated %}
+          <form id="logout-form" method="post" action="{% url 'account_logout' %}" hidden>
+            {% csrf_token %}
+          </form>
+        {% endif %}
       </nav>
       {% block header %}{% endblock %}
     </header>

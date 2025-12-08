@@ -2,16 +2,6 @@
 
 {% block title %} - Geschenkliste{% endblock %}
 
-{% block nav %}
-  <li><a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Logout</a></li>
-{% endblock %}
-
-{% block nav_extra %}
-  <form id="logout-form" method="post" action="{% url 'account_logout' %}" hidden>
-    {% csrf_token %}
-  </form>
-{% endblock %}
-
 {% block header %}
   <h1>
     Hey <em>{{ user.username|capfirst }}</em> — Du hast die <mark><em>{{ code_name }}</em></mark> gezogen! 🎉
