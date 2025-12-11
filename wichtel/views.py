@@ -15,6 +15,7 @@ def home(request):
         return _giftlist(user_drawing.receiver.wishlist, request)
     return _wishlist(request)
 
+
 def _wishlist(request):
     wishlist = Wishlist.objects.get_or_create(user=request.user, defaults={"text": ""})[0]
     if request.method == "POST":
@@ -26,11 +27,16 @@ def _wishlist(request):
     Event.objects.create(user=request.user, name="wishlist.viewed")
     return render(request, "wichtel/wishlist.html", {"wishlist": wishlist})
 
+
 def _giftlist(giftlist, request):
     Event.objects.create(user=request.user, name="giftlist.viewed")
     profile = giftlist.user.profile
-    return render(request, "wichtel/giftlist.html", {
-        "giftlist": giftlist,
-        "code_name": profile.code_name,
-        "address": profile.address,
-    })
+    return render(
+        request,
+        "wichtel/giftlist.html",
+        {
+            "giftlist": giftlist,
+            "code_name": profile.code_name,
+            "address": profile.address,
+        },
+    )
