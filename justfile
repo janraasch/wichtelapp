@@ -12,13 +12,14 @@ test:
 
 # Check linting (no fixes)
 lint:
+    uv run ruff format --check .
     uv run ruff check .
     uv run djhtml --check wichtel/templates/
 
 # Auto-fix and format
 fmt:
-    uv run ruff check --fix .
     uv run ruff format .
+    uv run ruff check --fix .
     uv run djhtml wichtel/templates/
 
 # CI: lint + test
