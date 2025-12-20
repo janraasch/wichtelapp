@@ -621,3 +621,10 @@ footer {
   /* Add some breathing space at the bottom */
   padding-bottom: 3rem;
 }
+
+/* Snow color: rebeccapurple in light mode, default (white) in dark mode */
+@media (prefers-color-scheme: light) {
+  snow-fall {
+    --snow-fall-color: rebeccapurple;
+  }
+}
