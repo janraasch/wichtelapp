@@ -23,7 +23,7 @@ jobs:
         run: uv sync --all-groups
 
       - name: Install just
-        uses: extractions/setup-just@v3
+        uses: extractions/setup-just@v4
 
       - name: Run ci checks
         run: just ci
