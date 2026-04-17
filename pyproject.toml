@@ -10,7 +10,7 @@ dependencies = [
     "django-allauth>=65.16.0",
     "django-debug-toolbar>=6.1.0",
     "gunicorn>=23.0.0",
-    "psycopg[binary]>=3.2.13",
+    "psycopg[binary]>=3.3.3",
     "whitenoise>=6.11.0",
 ]
 
