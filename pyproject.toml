@@ -17,7 +17,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "djhtml>=3.0.10",
-    "ruff>=0.15.16",
+    "ruff>=0.15.17",
 ]
 
 [tool.ruff]
