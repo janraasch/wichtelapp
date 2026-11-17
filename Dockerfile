@@ -31,10 +31,13 @@ RUN groupadd --system --gid 999 nonroot \
  && useradd --system --gid 999 --uid 999 --create-home nonroot
 
 # Copy the Python version
-COPY --from=builder --chown=python:python /python /python
+COPY --from=builder --chown=nonroot:nonroot /python /python
 
 # Copy the application from the builder
 COPY --from=builder --chown=nonroot:nonroot /app /app
+
+# SQLite lives here; a Docker volume is mounted over it.
+RUN mkdir -p /app/db && chown nonroot:nonroot /app/db
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
@@ -45,8 +48,8 @@ USER nonroot
 # Use `/app` as the working directory
 WORKDIR /app
 
-RUN ON_FLYIO_SETUP="1" python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "config.wsgi"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && exec gunicorn --bind :8000 --workers 2 config.wsgi"]

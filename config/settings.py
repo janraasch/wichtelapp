@@ -14,6 +14,8 @@ import os
 import sys
 from pathlib import Path
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,13 +23,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-SECRET_KEY = "django-insecure-%r=gob(2!%ygeqn69)@s@tkyhays#b(0-siw=)v$@m%04w0=dv"
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-%r=gob(2!%ygeqn69)@s@tkyhays#b(0-siw=)v$@m%04w0=dv")
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "TRUE") == "TRUE"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [host for host in os.environ.get("ALLOWED_HOSTS", "").split(",") if host]
+
+CSRF_TRUSTED_ORIGINS = [origin for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin]
+
+# TLS terminates at the reverse proxy.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -52,6 +59,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -91,6 +99,9 @@ DATABASES = {
     }
 }
 
+if os.environ.get("DATABASE_URL"):
+    DATABASES["default"] = dj_database_url.parse(os.environ["DATABASE_URL"])
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -126,7 +137,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -153,47 +165,3 @@ if ENABLE_DEBUG_TOOLBAR:
     ]
     # Customize the config to support turbo and htmx boosting.
     DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
-
-
-# Fly.io settings.
-if os.environ.get("ON_FLYIO_SETUP") or os.environ.get("ON_FLYIO"):
-    # Static file configuration needs to take effect during the build process,
-    #   and when deployed.
-    # from https://whitenoise.evans.io/en/stable/#quickstart-for-django-apps
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATIC_URL = "/static/"
-    try:
-        STATICFILES_DIRS.append(os.path.join(BASE_DIR, "static"))  # pyright: ignore[reportUndefinedVariable]
-    except NameError:
-        STATICFILES_DIRS = [
-            os.path.join(BASE_DIR, "static"),
-        ]
-
-    i = MIDDLEWARE.index("django.middleware.security.SecurityMiddleware")
-    MIDDLEWARE.insert(i + 1, "whitenoise.middleware.WhiteNoiseMiddleware")
-
-if os.environ.get("ON_FLYIO"):
-    # These settings need to be in place during deployment, but not during
-    #   the setup process.
-    # The `dj_database_url.parse()` call causes the build to fail; other settings
-    #   here may not.
-    import dj_database_url
-
-    # Set the secret key from the environment variable.
-    SECRET_KEY = os.environ["SECRET_KEY"]
-
-    # Use secret, if set, to update DEBUG value.
-    if os.environ.get("DEBUG") == "FALSE":
-        DEBUG = False
-    elif os.environ.get("DEBUG") == "TRUE":
-        DEBUG = True
-
-    # Set a Fly.io-specific allowed host.
-    ALLOWED_HOSTS += ["wichtelapp.fly.dev", "wichtelapp.janraasch.com"]
-
-    # Use the Fly.io Postgres database.
-    db_url = os.environ.get("DATABASE_URL")
-    DATABASES["default"] = dj_database_url.parse(db_url)
-
-    # Prevent CSRF "Origin checking failed" issue.
-    CSRF_TRUSTED_ORIGINS = ["https://wichtelapp.fly.dev", "https://wichtelapp.janraasch.com"]
