@@ -132,7 +132,7 @@ class UserDrawing(models.Model):
         constraints = [
             UniqueConstraint(fields=["drawing", "giver"], name="unique_giver_per_drawing"),
             UniqueConstraint(fields=["drawing", "receiver"], name="unique_receiver_per_drawing"),
-            CheckConstraint(check=~Q(giver=F("receiver")), name="no_self_gifting"),
+            CheckConstraint(condition=~Q(giver=F("receiver")), name="no_self_gifting"),
         ]
 
     def __str__(self):
